@@ -1,0 +1,6 @@
+[project]
+name = "kapita-uas-2026"
+version = "0.1.0"
+description = "Kapita Selekta Sains Data Gasal 2026/2027 - UAS & Tugas 2"
+requires-python = ">=3.13"
+dependencies = []

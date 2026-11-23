@@ -1,0 +1,25 @@
+# Python / uv
+.venv/
+.uv-cache/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+
+# Local indexes
+.codegraph/
+graphify-out/
+
+# Environment and OS noise
+.env
+*Zone.Identifier
+~$*
+
+# Source data, heavy outputs, and personal data (public repo)
+data/raw/
+data/processed/
+results/
+experiments/outputs/
+penilaian-anggota*/
+*penilaian-anggota*
+*peer-eval*
