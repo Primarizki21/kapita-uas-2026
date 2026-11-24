@@ -1,0 +1,299 @@
+{
+  "experiment": "EXP-001",
+  "generated_at": "2026-11-24T03:59:48.869314+00:00",
+  "config_sha256": "f8283ecc6edd0d528b403ce61030e7d53cb1a01cc39df1913aaec23e549cbde8",
+  "seed": 20261123,
+  "run_id": "EXP-001-20261124T035513458240Z-f8283ecc",
+  "attempt": 3,
+  "events_path": "experiments/EXP-001/events.jsonl",
+  "data": {
+    "name": "ITSP",
+    "commit": "0553f683f99403efb5ef440af826c1d229a52376",
+    "archive_sha256": "7d2329ca5cd1009ee0c7518095a13b18fb82a6931750ece27014a83f5d13dec0",
+    "n_items_available": 661,
+    "n_items_selected": 20
+  },
+  "model": {
+    "name": "deepseek-v4.1-flash",
+    "base_url": "https://opencode.ai/inference/go"
+  },
+  "execution": {
+    "n_items": 20,
+    "buggy_compiled": 17,
+    "correct_compiled": 16,
+    "fail_to_pass_items": 14,
+    "fail_to_pass_rate": 0.7
+  },
+  "generation": {
+    "n_items": 20,
+    "judge_parseable": 20,
+    "mean_by_dimension": {
+      "collaboration": 4.15,
+      "cooperation": 4.0,
+      "negotiation": 3.55,
+      "ideas_sharing": 4.2
+    }
+  },
+  "execution_per_item": [
+    {
+      "item_id": "Lab-10-3241-303532",
+      "buggy": {
+        "compiled": true,
+        "passed": 4,
+        "total": 5
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 5,
+        "total": 5
+      }
+    },
+    {
+      "item_id": "Lab-11-3291-305271",
+      "buggy": {
+        "compiled": false,
+        "passed": 0,
+        "total": 6
+      },
+      "correct": {
+        "compiled": false,
+        "passed": 0,
+        "total": 6
+      }
+    },
+    {
+      "item_id": "Lab-11-3294-306033",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 5
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 5,
+        "total": 5
+      }
+    },
+    {
+      "item_id": "Lab-11-3297-305861",
+      "buggy": {
+        "compiled": false,
+        "passed": 0,
+        "total": 8
+      },
+      "correct": {
+        "compiled": false,
+        "passed": 0,
+        "total": 8
+      }
+    },
+    {
+      "item_id": "Lab-11-3299-305632",
+      "buggy": {
+        "compiled": false,
+        "passed": 0,
+        "total": 7
+      },
+      "correct": {
+        "compiled": false,
+        "passed": 0,
+        "total": 7
+      }
+    },
+    {
+      "item_id": "Lab-12-3355-307068",
+      "buggy": {
+        "compiled": true,
+        "passed": 3,
+        "total": 9
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 9,
+        "total": 9
+      }
+    },
+    {
+      "item_id": "Lab-12-3360-307449",
+      "buggy": {
+        "compiled": true,
+        "passed": 6,
+        "total": 6
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 6,
+        "total": 6
+      }
+    },
+    {
+      "item_id": "Lab-3-2810-270068",
+      "buggy": {
+        "compiled": true,
+        "passed": 3,
+        "total": 4
+      },
+      "correct": {
+        "compiled": false,
+        "passed": 0,
+        "total": 4
+      }
+    },
+    {
+      "item_id": "Lab-3-2811-270194",
+      "buggy": {
+        "compiled": true,
+        "passed": 4,
+        "total": 6
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 6,
+        "total": 6
+      }
+    },
+    {
+      "item_id": "Lab-4-2827-271353",
+      "buggy": {
+        "compiled": true,
+        "passed": 3,
+        "total": 9
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 9,
+        "total": 9
+      }
+    },
+    {
+      "item_id": "Lab-4-2828-271463",
+      "buggy": {
+        "compiled": true,
+        "passed": 4,
+        "total": 7
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 7,
+        "total": 7
+      }
+    },
+    {
+      "item_id": "Lab-5-2864-277524",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 5
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 5,
+        "total": 5
+      }
+    },
+    {
+      "item_id": "Lab-5-2867-277945",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 6
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 6,
+        "total": 6
+      }
+    },
+    {
+      "item_id": "Lab-5-2869-278146",
+      "buggy": {
+        "compiled": true,
+        "passed": 1,
+        "total": 6
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 6,
+        "total": 6
+      }
+    },
+    {
+      "item_id": "Lab-6-2932-279986",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 7
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 0,
+        "total": 7
+      }
+    },
+    {
+      "item_id": "Lab-6-2937-280572",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 5
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 5,
+        "total": 5
+      }
+    },
+    {
+      "item_id": "Lab-6-2939-280884",
+      "buggy": {
+        "compiled": true,
+        "passed": 6,
+        "total": 7
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 7,
+        "total": 7
+      }
+    },
+    {
+      "item_id": "Lab-7-3078-296227",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 9
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 9,
+        "total": 9
+      }
+    },
+    {
+      "item_id": "Lab-7-3089-296082",
+      "buggy": {
+        "compiled": true,
+        "passed": 0,
+        "total": 9
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 9,
+        "total": 9
+      }
+    },
+    {
+      "item_id": "Lab-8-3082-297445",
+      "buggy": {
+        "compiled": true,
+        "passed": 2,
+        "total": 5
+      },
+      "correct": {
+        "compiled": true,
+        "passed": 5,
+        "total": 5
+      }
+    }
+  ]
+}

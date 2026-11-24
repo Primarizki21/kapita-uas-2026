@@ -12,6 +12,7 @@ graphify-out/
 
 # Environment and OS noise
 .env
+.omp/
 *Zone.Identifier
 ~$*
 

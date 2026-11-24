@@ -1,0 +1,18 @@
+{
+  "experiment": "EXP-001",
+  "run_id": "EXP-001-20261124T035513458240Z-f8283ecc",
+  "attempt": 3,
+  "config_sha256": "f8283ecc6edd0d528b403ce61030e7d53cb1a01cc39df1913aaec23e549cbde8",
+  "git_sha": "29bad9fc2ea313b90d198e1b684ff5bdba6e380f",
+  "started_utc": "2026-11-24T03:55:13.458225+00:00",
+  "python": "3.13.16",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "wall_time_s": 275.433,
+  "peak_rss_mb": 34.35,
+  "data_sha256": "7d2329ca5cd1009ee0c7518095a13b18fb82a6931750ece27014a83f5d13dec0",
+  "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "pyyaml": "6.0.4",
+  "model": "deepseek-v4.1-flash",
+  "gateway": "https://opencode.ai/inference/go",
+  "n_items": 20
+}

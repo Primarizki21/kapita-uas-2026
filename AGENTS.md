@@ -44,3 +44,17 @@ Kelompok 9: GIZHA PRADIPTA (164231011), AISYA RIZKYA HIDAYAH (164231034), PRIMAR
 ## Skill gate
 
 Sebelum kerja non-trivial, baca `skill://karpathy-guidelines` dan `skill://antislop`. Saat menulis naskah tambahkan `skill://research-paper-writing`; saat mengubah dokumen ini baca `skill://writing-for-agents`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues for this repo live in GitHub Issues at Primarizki21/kapita-uas-2026; skills use the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Five canonical roles: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.

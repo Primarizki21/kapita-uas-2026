@@ -1,0 +1,37 @@
+experiment: EXP-001
+seed: 20261123
+
+data:
+  name: ITSP
+  commit: 0553f683f99403efb5ef440af826c1d229a52376
+  url: https://codeload.github.com/jyi/ITSP/tar.gz/0553f683f99403efb5ef440af826c1d229a52376
+  archive: data/raw/ITSP-0553f683f99403efb5ef440af826c1d229a52376.tar.gz
+  sha256: 7d2329ca5cd1009ee0c7518095a13b18fb82a6931750ece27014a83f5d13dec0
+  license: MIT
+  n_items: 20
+
+model:
+  provider: opencode
+  base_url: https://opencode.ai/inference/go
+  chat_path: /v1/chat/completions
+  name: deepseek-v4.1-flash
+  thinking: disabled
+  api_key_env: OPENCODE_API_KEY
+  user_agent: kapita-uas-exp001/1.0
+  session_header: x-opencode-session
+  temperature: 0.7
+  max_tokens: 1024
+  timeout_s: 60
+
+judge:
+  dimensions:
+    - collaboration
+    - cooperation
+    - negotiation
+    - ideas_sharing
+  scale_max: 5
+
+evaluation:
+  gcc: gcc
+  compile_timeout_s: 20
+  run_timeout_s: 5
