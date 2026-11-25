@@ -55,7 +55,7 @@ uv run python -m unittest discover -s tests
 
 uv sync --extra notebook
 uv run python scripts/build_walkthrough_notebook.py
-# Buka notebooks/EXP-001-walkthrough.ipynb, lalu Restart and Run All
+# Buka notebooks/walkthrough.ipynb, lalu Restart and Run All
 ```
 
 `src/experiment_trace.py` adalah core trace reusable. `scripts/build_walkthrough_notebook.py` membangun notebook dari snippet kode dan artifact yang sudah ada.
