@@ -95,8 +95,8 @@ Cek warna: plot bawaan matplotlib mungkin berwarna. Sesuaikan ke skala abu-abu s
 
 - Minimal 25 artikel jurnal dengan DOI aktif, format APA 6.0, sesuai pointer Format bagian 8.
 - Sumber utama: SocioMathLLM DOI `10.1109/TLT.2026.3677266`; ITSP; DebugBench DOI `10.18653/v1/2024.findings-acl.247`.
-- `docs/research/coding-framework-fit.md` memuat 30 karya terverifikasi, 13 di antaranya jurnal atau review. Hitung hanya jurnal ber-DOI aktif, lalu cari kekurangannya dari `docs/research/reference-pool.md`.
-- Validasi DOI aktif sebelum submission. Jangan memasukkan entri tanpa DOI hanya untuk mencapai 25.
+- Seleksi 25 jurnal ber-DOI aktif sudah tercatat di `docs/REFERENCES.md`, diambil dari `docs/research/reference-pool.md` dengan status DOI dicek 2026-11-23.
+- Validasi DOI aktif kembali sebelum submission. Jangan memasukkan entri tanpa DOI hanya untuk mencapai 25.
 
 ## Urutan kerja
 
