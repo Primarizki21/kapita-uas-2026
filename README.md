@@ -1,6 +1,22 @@
 # kapita-uas-2026
 
-Repositori UAS Kapita Selekta Sains Data Gasal 2026/2027, kelompok 9, topik 1. EXP-001 mereplikasi pendekatan SocioMathLLM untuk menghasilkan collaborative debugging tasks dari dataset ITSP: tiga modul prompt, judge empat kompetensi sosial, dan jejak audit tiap run. Angka makalah harus bisa ditelusur sampai artifact di `experiments/EXP-001/`.
+Repositori UAS Kapita Selekta Sains Data Gasal 2026/2027, kelompok 9, topik 1. EXP-001 mengadaptasi kerangka SocioMathLLM untuk menghasilkan collaborative debugging tasks dari dataset ITSP: tiga modul prompt, judge empat kompetensi sosial, dan jejak audit tiap run. Angka makalah harus bisa ditelusur sampai artifact di `experiments/EXP-001/`.
+
+## Hubungan dengan SocioMathLLM
+
+Studi ini mengadaptasi kerangka SocioMathLLM, bukan mereplikasikannya. Paper asli memakai tiga modul berurutan: contextualization menghasilkan lima kandidat soal cerita geometri dari konteks foto dan diagram, personalization memilih satu kandidat berdasarkan profil kelompok, lalu socialization menulis ulang kandidat itu agar memuat collaboration, cooperation, negotiation, dan ideas sharing. Kita mempertahankan urutan dan tujuan itu, tetapi mengganti artefak serta cara mengukurnya.
+
+| Aspek | SocioMathLLM | Studi ini |
+|---|---|---|
+| Artefak | soal cerita geometri 2D | tugas debugging C dari ITSP |
+| Konteks | foto benda dan diagram | pernyataan soal, kode buggy, kode benar |
+| Profil | latar belakang siswa matematika | pasangan programmer dengan pengalaman berbeda |
+| Model | GPT-4o lewat API resmi | deepseek-v4.1-flash lewat gateway OpenCode |
+| Evaluasi | BLEU, METEOR, ROUGE-L, BLEURT, BERT, penilai manusia, LLM judge | kompilasi, test, dan LLM judge |
+
+Alasannya: metrik teks paper mengukur kesamaan dengan soal referensi, sedangkan kita tidak punya tugas referensi buatan manusia. Karena itu yang diukur adalah keberhasilan eksekusi kode dan skor rubrik. Dari 661 butir ITSP dipakai 20 dengan seed `20261123`; angka dari `run_id` `EXP-001-20261124T035513458240Z-f8283ecc` ada di `experiments/EXP-001/metrics.json`.
+
+Batas klaim: tidak ada kondisi zero-shot, panel penilai manusia, uji dengan mahasiswa, atau perhitungan tumpang tindih 20%. Makalah hanya boleh menyatakan adaptasi kerangka, bukan replikasi atau peningkatan terhadap paper. Detail di `docs/SCOPE.md` bagian 1, 2, dan 8.
 
 ## Requirements
 
