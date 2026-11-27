@@ -57,12 +57,12 @@ SNIPPETS = {
     "report": source_block(REPORT, "main"),
 }
 
-INTRO = """Notebook ini menjelaskan alur pipeline dan jejaknya. Angka di bawah dibaca dari artifact hasil run yang sebenarnya, bukan dihitung ulang dari data mentah."""
+INTRO = """Notebook ini menelusuri satu pertanyaan: apakah struktur prompt tiga modul SocioMathLLM dapat dipakai untuk tugas debugging C? Setiap langkah menunjukkan input, keputusan, dan buktinya. Angka dibaca dari artifact hasil run yang sebenarnya, bukan dihitung ulang dari data mentah."""
 
 PAIRS = [
     (
         "1. Data dan pertanyaan",
-        "Config menetapkan seed, arsip ITSP, model, dan butir yang dipakai. Pertanyaan praktisnya: apakah pipeline menghasilkan tugas yang lolos pemeriksaan eksekusi dan memenuhi rubrik sosial?",
+        "Kami mulai dari konfigurasi karena seed, arsip, dan model menetapkan batas reproduksi. Pertanyaannya: apakah pipeline menghasilkan tugas yang lolos pemeriksaan eksekusi dan memenuhi rubrik sosial?",
         "config",
         """import json
 from pathlib import Path
@@ -106,7 +106,7 @@ print(summary.to_string(index=False))""",
     ),
     (
         "2. Dari arsip ke contoh butir",
-        "Fungsi load_items memilih butir secara deterministik. Dua baris di bawah menunjukkan bentuk data yang masuk ke pipeline.",
+        "Dari 661 butir ITSP, seed yang sama memilih 20 butir secara deterministik. Ini pilot yang bisa ditelusur sampai id butir, bukan dasar generalisasi statistik.",
         "items",
         """items = pd.DataFrame(
     [json.loads(line) for line in (PROCESSED / "items.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -124,7 +124,7 @@ print(generations["final_task"].iloc[0][:420])""",
     ),
     (
         "3. Kompilasi dan fail-to-pass",
-        "Kode buggy dan benar dikompilasi, lalu dibandingkan jumlah test yang lulus. Plot dibaca dari artifact yang sama dengan metrik.",
+        "Sebelum menilai teks, kami memeriksa apakah kode buggy dan kode benar benar-benar berbeda perilaku. Hanya butir yang lolos fail-to-pass yang layak dijadikan bukti.",
         "compile",
         """execution = pd.DataFrame(list(metrics["execution"].items()), columns=["metric", "value"])
 print(execution.to_string(index=False))
@@ -132,7 +132,7 @@ show_figure("pass_rate_per_item.png")""",
     ),
     (
         "4. Prompt dan judge",
-        "Empat panggilan LLM per butir menghasilkan kandidat, seleksi, rewrite, dan skor. Rubrik memakai empat kompetensi sosial.",
+        "Setelah kode tervalidasi, tiga modul prompt menghasilkan tugas dan satu judge menilai empat cue sosial. Skor ini mengukur teks tugas, bukan perilaku mahasiswa.",
         "prompt",
         """judge = pd.DataFrame(
     list(metrics["generation"]["mean_by_dimension"].items()),
@@ -144,7 +144,7 @@ show_figure("judge_scores.png")""",
     ),
     (
         "5. Trace core",
-        "RunLog menulis event append-only, menghitung attempt, dan menolak config yang berubah.",
+        "Setiap panggilan tercatat supaya angka bisa dikaitkan dengan satu run. RunLog menolak config yang berubah dan menghitung attempt saat judge gagal dibaca.",
         "trace",
         """events = [
     json.loads(line)
@@ -157,7 +157,7 @@ show_figure("stage_timeline.png")""",
     ),
     (
         "6. Provenance dan artifact lokal",
-        "Provenance mencatat versi dan hash. Plot kegagalan merangkum error yang tercatat selama run.",
+        "Provenance mengunci versi dan hash supaya run lain tidak tercampur. Ringkasan kegagalan menjelaskan bagian yang tidak ikut dihitung.",
         "provenance",
         """provenance = json.loads((D / "provenance.json").read_text(encoding="utf-8"))
 rows = [(key, value) for key, value in provenance.items() if not isinstance(value, (dict, list))]
@@ -166,7 +166,7 @@ show_figure("failure_breakdown.png")""",
     ),
     (
         "7. Dari kode ke plot",
-        "Plot dibangun oleh skrip terpisah dari artifact yang sama. Notebook hanya menampilkannya di bagian yang relevan.",
+        "Plot dibangun ulang dari artifact yang sama, bukan dari angka yang ditulis manual. Notebook menampilkannya pada langkah yang memakainya.",
         "report",
         """figures = sorted(path.name for path in FIG.glob("*.png"))
 print("artifact plot:")
