@@ -90,6 +90,7 @@ def plot_failures(summary: dict, metrics: dict) -> None:
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    plt.style.use("grayscale")
     summary = summarize(load_events(EXP_DIR / "events.jsonl"))
     metrics = json.loads((EXP_DIR / "metrics.json").read_text(encoding="utf-8"))
     plot_stage_timeline(summary)
