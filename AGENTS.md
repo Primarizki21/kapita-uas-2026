@@ -2,6 +2,10 @@
 
 Kapita Selekta Sains Data Gasal 2026/2027, kelompok 9, topik 1. Tujuan: makalah UAS berbahasa Inggris dan syntax plus data Tugas 2 yang bisa direproduksi, tuntas sebelum 10 Desember 2026 pukul 23.50.
 
+## Karakterisasi studi
+
+Ini adaptasi struktural SocioMathLLM, bukan replikasi. Dipertahankan: tiga modul prompt berurutan, tujuan memicu interaksi sosial, prompt engineering tanpa fine-tuning, empat kompetensi sosial, triangulasi metrik otomatis, rubrik, dan LLM judge. Diganti: artefak geometri menjadi tugas debugging C, foto dan diagram menjadi soal plus kode, profil siswa menjadi pasangan programmer, GPT-4o menjadi DeepSeek via OpenCode, metrik teks dan penilai manusia menjadi kompilasi, test, dan LLM judge. Tidak ada referensi teks, zero-shot, panel manusia, atau uji mahasiswa, jadi klaim dibatasi pada adaptasi kerangka. Penjelasan untuk pembaca ada di `README.md` bagian "Hubungan dengan SocioMathLLM"; batas klaim ada di `docs/SCOPE.md` bagian 8.
+
 ## Source of truth
 
 | Materi | Baca saat |
@@ -37,6 +41,7 @@ Kelompok 9: GIZHA PRADIPTA (164231011), AISYA RIZKYA HIDAYAH (164231034), PRIMAR
 - **uv**. `pyproject.toml` dan `uv.lock` adalah satu-satunya sumber dependency. Pakai `uv add`, `uv sync --frozen`, dan `uv run python ...`. Simpan `.venv/` di luar git. Bila cache uv bermasalah di WSL, set `UV_CACHE_DIR="$PWD/.uv-cache"`.
 - **Ledger**. Catat tiap percobaan di ledger append-only dengan tanggal, hipotesis, konfigurasi, metrik, dan keputusan. Regenerate ledger lewat skrip. Angka di makalah harus bisa ditelusur sampai berkas hasil; hapus klaim yang tidak bisa ditelusur.
 - **Data**. `data/raw/` bersifat immutable; turunan dan hasil percepatan masuk folder terpisah dan diabaikan git. Commit hanya manifest, metrik ringkas, dan ledger. Enkripsi atau data pribadi masuk environment variable, bukan repo.
+- **Notebook**. Beri nama berkas notebook berdasarkan isinya, bukan ID atau nomor percobaan. Path artifact di dalam notebook tetap mengikuti sumbernya.
 - **Naskah**. Bahasa Inggris. Ikuti format UTS untuk font, spasi, indentasi, caption tabel di atas, caption gambar di bawah, warna monokrom, dan matematika OMML. Hindari em dash, en dash, kata hype, dan klaim tanpa bukti. Satu paragraf membawa satu pesan dengan topic sentence.
 - **Bahasa**. Indonesia untuk koordinasi dan catatan internal; Inggris untuk makalah, identifier kode, dan pesan commit. Istilah teknis tetap Inggris. Pakai "penurunan" bukan "regresi" untuk penurunan metrik.
 - **Git**. Commit di branch `feat/`, `docs/`, atau `fix/`. Pesan commit berbentuk `type(scope): deskripsi`. Stage file secara eksplisit dan periksa diff terhadap kunci atau data pribadi sebelum commit. Agen hanya commit lokal, user yang melakukan push dan merge.

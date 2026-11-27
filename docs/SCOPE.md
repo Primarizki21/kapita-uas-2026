@@ -79,3 +79,35 @@ Skrip memuat `.env` dari root repo otomatis tanpa menimpa variabel yang sudah ad
 Mode `--prepare-only` memverifikasi hash arsip, membangun 20 butir dari 661 butir ITSP dengan seed `20261123`, mengompilasi kode, dan menulis metrik eksekusi tanpa jaringan. Mode penuh menambah tiga modul prompt dan LLM judge melalui gateway OpenCode; kunci tidak boleh ditulis di repo.
 
 Status verifikasi 2026-11-24: full run berhasil dengan run_id `EXP-001-20261124T035513458240Z-f8283ecc`, attempt 3, model `deepseek-v4.1-flash` melalui endpoint Go OpenCode, thinking dinonaktifkan, 20 dari 20 penilaian judge terbaca. Metrik: 17 dari 20 kode buggy dan 16 dari 20 kode benar terkompilasi, 14 butir fail-to-pass (0,70). Rerata skor judge: collaboration 4,15; cooperation 4,00; negotiation 3,55; ideas sharing 4,20. Angka ada di `experiments/EXP-001/metrics.json`, provenance di `experiments/EXP-001/provenance.json`, dan jejak generasi lokal di `experiments/outputs/EXP-001/`. Karena temperature 0,7, angka judge dapat berubah pada run berikutnya; versi makalah harus memakai angka dari run_id ini.
+
+## 8. Batasan yang disetujui
+
+Bagian ini menjaga klaim makalah tetap berada dalam ruang yang bisa dibuktikan. Setiap butir menunjuk ke artifact atau dokumen yang menjadi dasarnya.
+
+### 8.1 Referensi dan metrik
+
+- Tidak ada reference task berupa tugas debugging kolaboratif buatan manusia. Yang tersedia adalah pasangan kode buggy dan benar beserta test di `data/processed/EXP-001/items.jsonl`, bukan teks tujuan generasi. Metrik BLEU, METEOR, ROUGE-L, BLEURT, dan BERT tidak dipakai karena tidak ada pasangan teks referensi untuk dibandingkan. Metrik otomatis paper mengukur kesamaan soal hasil dengan soal referensi, sedangkan metrik kita hanya mengukur keberhasilan eksekusi dan skor rubrik.
+- Tidak ada kondisi zero-shot. Percobaan hanya menjalankan satu pipeline terstruktur, sehingga tidak boleh ada klaim peningkatan terhadap baseline. Paper membandingkan metodenya dengan zero-shot (`knowledge/SOCIOM~1.md`, Hal. 276-278).
+- Tidak ada panel penilai manusia, tidak ada validasi rubrik oleh instruktur, dan tidak ada ICC. Rubrik empat kompetensi diadaptasi dari paper tanpa kalibrasi serupa. Skor judge berasal dari satu model pada temperature 0,7, sehingga angka terikat pada `run_id` dan dapat berubah pada run berikutnya (`experiments/EXP-001/metrics.json`, `experiments/EXP-001/provenance.json`).
+- Judge menilai teks tugas, bukan perilaku pasangan saat debugging dan bukan hasil belajar. Tidak ada uji dengan mahasiswa atau quasi-experiment.
+
+### 8.2 Data dan konstruk
+
+- Hanya 20 dari 661 butir ITSP yang dipakai dengan seed `20261123`. Ini skala pilot, bukan dasar generalisasi statistik (`experiments/EXP-001/config.yaml`).
+- Artefaknya adalah program C, bukan mathematical word problem. Kontekstualisasi memakai pernyataan teks, bukan gambar dan diagram seperti modul multimodal paper.
+- Profil pasangan bersifat hipotetis. Tidak ada dialog debugging sungguhan maupun label sosial pada data; empat kompetensi diwujudkan sebagai cue pada prompt dan dinyatakan sebagai limitasi sejak ADR 0001.
+- Kesulitan hanya proxy berupa id praktikum. Kode rujukan hanya diverifikasi dengan test contoh yang tertanam di butir, tanpa hidden test, sehingga lulus test belum membuktikan kebenaran semantik.
+- Dari 20 butir, 17 kode buggy dan 16 kode benar terkompilasi, serta 14 butir memenuhi fail-to-pass. Enam butir tidak lolos kriteria validitas ketat tersebut (`experiments/EXP-001/metrics.json`).
+
+### 8.3 Pipeline dan reproduksi
+
+- Satu model, `deepseek-v4.1-flash`, lewat satu gateway. Tidak ada validasi lintas model dan tidak ada fine-tuning. Paper juga hanya memakai GPT-4o, jadi studi ini tidak menambah bukti generalisasi model.
+- Tidak ada audit kebocoran solusi. Prompt meminta agar perbaikan tidak diungkap, tetapi keluaran belum diperiksa secara sistematis terhadap kode benar (`src/exp001.py`).
+- Reproduksi penuh membutuhkan `OPENCODE_API_KEY`, jaringan, dan `gcc` 15.2.0. Prompt dan response mentah serta figure berada di folder yang diabaikan git; yang ter-commit hanya ringkasan metrik, events, provenance, dan manifest (`README.md`, `docs/adr/0002-deepseek-opencode-gateway.md`).
+- Notebook walkthrough membaca artifact lokal yang diabaikan git. Pipeline dan `src/exp001_report.py` harus dijalankan lebih dulu sebelum notebook di-regenerate.
+- Ledger memuat baris ganda dari beberapa `prepare` run dan belum dikurasi. Angka makalah memakai baris run penuh terakhir, bukan seluruh isi ledger.
+
+### 8.4 Risiko penilaian dan kelengkapan
+
+- Penggantian artefak dari mathematical word problem ke kode berisiko dibaca sebagai topik berbeda. Mitigasi ditulis di pendahuluan dan related work, tetapi batas tumpang tindih 20 persen dengan kelompok bertopik sama belum diukur dengan alat (`docs/adr/0001-coding-debugging-pivot.md`, `knowledge/Tugas 2 dan UAS Kapita Selekta Sains Data Gasal 2026-2027.md` baris 30-32).
+- Target minimal 25 referensi jurnal ber-DOI belum terpenuhi dari tema sempit saja. Dari 30 karya terverifikasi di `docs/research/coding-framework-fit.md`, 13 di antaranya adalah jurnal atau review. Referensi tambahan harus diambil dari strand riset lain.

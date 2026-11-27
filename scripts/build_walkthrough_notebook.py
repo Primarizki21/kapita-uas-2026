@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build notebooks/EXP-001-walkthrough.ipynb from real snippets and artifacts.
+"""Build notebooks/walkthrough.ipynb from real snippets and artifacts.
 
 Snippets are extracted verbatim from src/ at build time. Code cells are executed
 here once so stdout and plots are embedded; no Jupyter dependency is needed.
@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "notebooks" / "EXP-001-walkthrough.ipynb"
+OUT = ROOT / "notebooks" / "walkthrough.ipynb"
 EXP = ROOT / "experiments" / "EXP-001"
 
 
@@ -57,98 +57,120 @@ SNIPPETS = {
     "report": source_block(REPORT, "main"),
 }
 
-INTRO = """Notebook ini menjelaskan apa yang dikerjakan kode EXP-001 dan jejaknya. Angka di bawah dibaca dari artifact hasil run yang sebenarnya, bukan dihitung ulang dari data mentah."""
+INTRO = """Notebook ini menelusuri satu pertanyaan: apakah struktur prompt tiga modul SocioMathLLM dapat dipakai untuk tugas debugging C? Setiap langkah menunjukkan input, keputusan, dan buktinya. Angka dibaca dari artifact hasil run yang sebenarnya, bukan dihitung ulang dari data mentah."""
 
 PAIRS = [
     (
         "1. Data dan pertanyaan",
-        "Config menetapkan seed, arsip ITSP, dan 20 butir yang dipakai.",
+        "Kami mulai dari konfigurasi karena seed, arsip, dan model menetapkan batas reproduksi. Pertanyaannya: apakah pipeline menghasilkan tugas yang lolos pemeriksaan eksekusi dan memenuhi rubrik sosial?",
         "config",
         """import json
-import sys
-import yaml
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import yaml
 
 ROOT = Path.cwd()
 if not (ROOT / "pyproject.toml").is_file():
     ROOT = ROOT.parent
 D = ROOT / "experiments" / "EXP-001"
+FIG = ROOT / "experiments" / "outputs" / "EXP-001" / "figures"
+PROCESSED = ROOT / "data" / "processed" / "EXP-001"
 
 cfg = yaml.safe_load((D / "config.yaml").read_text(encoding="utf-8"))
 manifest = json.loads((D / "data-manifest.json").read_text(encoding="utf-8"))
-print(json.dumps({
-    "seed": cfg["seed"],
-    "dataset": cfg["data"]["name"],
-    "commit": cfg["data"]["commit"],
-    "sha256": cfg["data"]["sha256"],
-    "n_items": cfg["data"]["n_items"],
-    "n_items_available": manifest["n_items_available"],
-}, indent=2))""",
+metrics = json.loads((D / "metrics.json").read_text(encoding="utf-8"))
+
+
+def show_figure(name: str) -> None:
+    plt.figure(figsize=(10, 4))
+    plt.imshow(plt.imread(FIG / name))
+    plt.axis("off")
+    plt.show()
+
+
+summary = pd.DataFrame(
+    [
+        ("seed", cfg["seed"]),
+        ("dataset", cfg["data"]["name"]),
+        ("n_available", manifest["n_items_available"]),
+        ("n_selected", cfg["data"]["n_items"]),
+        ("model", cfg["model"]["name"]),
+        ("temperature", cfg["model"]["temperature"]),
+        ("run_id", metrics["run_id"]),
+    ],
+    columns=["field", "value"],
+)
+print(summary.to_string(index=False))""",
     ),
     (
-        "2. Dari arsip ke 20 butir",
-        "Fungsi ini memilih butir secara deterministik dari dataset hasil ekstraksi.",
+        "2. Dari arsip ke contoh butir",
+        "Dari 661 butir ITSP, seed yang sama memilih 20 butir secara deterministik. Ini pilot yang bisa ditelusur sampai id butir, bukan dasar generalisasi statistik.",
         "items",
-        """metrics = json.loads((D / "metrics.json").read_text(encoding="utf-8"))
-print(json.dumps(metrics["data"], indent=2))""",
+        """items = pd.DataFrame(
+    [json.loads(line) for line in (PROCESSED / "items.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+)
+sample = items[["item_id", "lab", "difficulty_proxy"]].head(2).copy()
+sample["statement_preview"] = items["statement"].head(2).str.replace("\\n", " ", regex=False).str[:60] + "..."
+sample["n_tests"] = items["tests"].head(2).apply(len)
+print(sample.to_string(index=False))
+
+generations = pd.DataFrame(
+    [json.loads(line) for line in (PROCESSED / "generations.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+)
+print("\\nContoh final_task:")
+print(generations["final_task"].iloc[0][:420])""",
     ),
     (
         "3. Kompilasi dan fail-to-pass",
-        "Kode buggy dan benar dikompilasi, lalu dibandingkan jumlah test yang lulus.",
+        "Sebelum menilai teks, kami memeriksa apakah kode buggy dan kode benar benar-benar berbeda perilaku. Hanya butir yang lolos fail-to-pass yang layak dijadikan bukti.",
         "compile",
-        """print(json.dumps(metrics["execution"], indent=2))""",
+        """execution = pd.DataFrame(list(metrics["execution"].items()), columns=["metric", "value"])
+print(execution.to_string(index=False))
+show_figure("pass_rate_per_item.png")""",
     ),
     (
         "4. Prompt dan judge",
-        "Empat panggilan LLM per butir menghasilkan kandidat, seleksi, rewrite, dan skor.",
+        "Setelah kode tervalidasi, tiga modul prompt menghasilkan tugas dan satu judge menilai empat cue sosial. Skor ini mengukur teks tugas, bukan perilaku mahasiswa.",
         "prompt",
-        """print(json.dumps(metrics["generation"], indent=2))""",
+        """judge = pd.DataFrame(
+    list(metrics["generation"]["mean_by_dimension"].items()),
+    columns=["dimension", "mean_score"],
+)
+print(judge.to_string(index=False))
+print(f"judge_parseable: {metrics['generation']['judge_parseable']}/{metrics['generation']['n_items']}")
+show_figure("judge_scores.png")""",
     ),
     (
         "5. Trace core",
-        "RunLog menulis event append-only, menghitung attempt, dan menolak config yang berubah.",
+        "Setiap panggilan tercatat supaya angka bisa dikaitkan dengan satu run. RunLog menolak config yang berubah dan menghitung attempt saat judge gagal dibaca.",
         "trace",
-        """from collections import Counter
-
-events = [
+        """events = [
     json.loads(line)
     for line in (D / "events.jsonl").read_text(encoding="utf-8").splitlines()
     if line.strip()
 ]
-print(json.dumps({
-    "events": len(events),
-    "by_name": dict(Counter(event["event"] for event in events)),
-    "attempts": sorted({
-        event.get("attempt") for event in events if event.get("attempt") is not None
-    }),
-}, indent=2))""",
+event_counts = pd.Series([event["event"] for event in events]).value_counts()
+print(event_counts.rename_axis("event").rename("count").to_string())
+show_figure("stage_timeline.png")""",
     ),
     (
         "6. Provenance dan artifact lokal",
-        "Provenance mencatat versi dan hash, sementara teks mentah tetap di folder yang diabaikan git.",
+        "Provenance mengunci versi dan hash supaya run lain tidak tercampur. Ringkasan kegagalan menjelaskan bagian yang tidak ikut dihitung.",
         "provenance",
         """provenance = json.loads((D / "provenance.json").read_text(encoding="utf-8"))
-local = ROOT / "experiments" / "outputs" / "EXP-001"
-print(json.dumps(provenance, indent=2))
-print("local files:", len(list(local.glob("*"))))
-print("figures:", [path.name for path in sorted((local / "figures").glob("*.png"))])""",
+rows = [(key, value) for key, value in provenance.items() if not isinstance(value, (dict, list))]
+print(pd.DataFrame(rows, columns=["field", "value"]).to_string(index=False))
+show_figure("failure_breakdown.png")""",
     ),
     (
-        "7. Visualisasi",
-        "Empat plot dibaca dari artifact dan ditampilkan di sini tanpa menghitung ulang angka.",
+        "7. Dari kode ke plot",
+        "Plot dibangun ulang dari artifact yang sama, bukan dari angka yang ditulis manual. Notebook menampilkannya pada langkah yang memakainya.",
         "report",
-        """import matplotlib.pyplot as plt
-
-fig_dir = local / "figures"
-paths = sorted(fig_dir.glob("*.png"))
-print([path.name for path in paths])
-fig, axes = plt.subplots(2, 2, figsize=(11, 7))
-for ax, path in zip(axes.ravel(), paths):
-    ax.imshow(plt.imread(path))
-    ax.axis("off")
-    ax.set_title(path.stem)
-plt.tight_layout()
-plt.show()""",
+        """figures = sorted(path.name for path in FIG.glob("*.png"))
+print("artifact plot:")
+print("\\n".join(f"- {name}" for name in figures))""",
     ),
 ]
 
